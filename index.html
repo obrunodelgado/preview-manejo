@@ -75,10 +75,76 @@
     }
   </style>
   <style id="loader-hide-modals">#pw-modal, #fx-modal{ display:none !important; }</style>
-  <script type="module" crossorigin src="/preview-manejo/assets/index-BUAKz8Fi.js"></script>
-  <link rel="stylesheet" crossorigin href="/preview-manejo/assets/style-M1BtVpxw.css">
+  <style>
+    .mobile-block{
+      position:fixed;
+      inset:0;
+      z-index:10200;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:#030202;
+      cursor:auto;
+      padding:2rem;
+    }
+    .mobile-block.is-visible{ display:flex; }
+    .mobile-block__inner{
+      max-width:340px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:1.5rem;
+      text-align:center;
+    }
+    .mobile-block__title{
+      font-family:'Cormorant Garamond',Georgia,serif;
+      font-style:italic;
+      font-size:clamp(1.4rem,6vw,1.8rem);
+      color:rgba(255,255,255,.85);
+      line-height:1.5;
+    }
+    .mobile-block__desc{
+      font-family:'Courier Prime',monospace;
+      font-size:clamp(0.8rem,3.5vw,0.95rem);
+      line-height:1.8;
+      color:rgba(255,255,255,.45);
+      letter-spacing:.05em;
+    }
+  </style>
+  <script type="module" crossorigin src="/preview-manejo/assets/index-CmOs1hnz.js"></script>
+  <link rel="stylesheet" crossorigin href="/preview-manejo/assets/style-CwPQkGeV.css">
 </head>
-<body>
+<body class="is-pre-reveal">
+
+  <!-- ── Bloqueio para dispositivos móveis ── -->
+  <div id="mobile-block" class="mobile-block">
+    <div class="mobile-block__inner">
+      <p class="mobile-block__title">Esta experiência foi feita para telas maiores.</p>
+      <p class="mobile-block__desc">Por ser uma experiência imersiva, solicitamos para que acesse em um computador, notebook ou tablet.</p>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var ua = navigator.userAgent || navigator.vendor || window.opera;
+      var isPhoneUA = /android.*mobile|iphone|ipod|windows phone|blackberry|opera mini|webos/i.test(ua.toLowerCase());
+      var isNarrowScreen = window.innerWidth <= 600;
+      if (isPhoneUA || isNarrowScreen) {
+        document.getElementById('mobile-block').classList.add('is-visible');
+        document.body.style.overflow = 'hidden';
+      }
+      window.addEventListener('resize', function(){
+        var block = document.getElementById('mobile-block');
+        if (window.innerWidth <= 600) {
+          block.classList.add('is-visible');
+          document.body.style.overflow = 'hidden';
+        } else if (!isPhoneUA) {
+          block.classList.remove('is-visible');
+          document.body.style.overflow = '';
+        }
+      });
+    })();
+  </script>
 
   <!-- ── Loading overlay ── -->
   <div id="loading-overlay" class="loading-overlay">
@@ -161,31 +227,6 @@
   <!-- ── Cursor personalizado ── -->
   <div id="custom-cursor" aria-hidden="true"></div>
 
-  <!-- ── Modal de senha ── -->
-  <div id="pw-modal" class="pw-modal" role="dialog" aria-modal="true" aria-labelledby="pw-modal-title">
-    <div class="pw-modal__inner">
-      <p class="pw-modal__label" id="pw-modal-title">Acesso restrito</p>
-      <p class="pw-modal__desc">
-        Esta experiência é de uso restrito.<br>
-        Insira a senha para continuar.
-      </p>
-      <div class="pw-modal__field-wrap">
-        <input
-          id="pw-input"
-          class="pw-modal__input"
-          type="password"
-          placeholder="••••••••••"
-          autocomplete="off"
-          spellcheck="false"
-          aria-label="Senha de acesso"
-        >
-      </div>
-      <p class="pw-modal__error" id="pw-error" aria-live="polite"></p>
-      <button id="pw-confirm" class="fx-modal__btn" type="button">
-        Entrar
-      </button>
-    </div>
-  </div>
 
   <!-- ── Modal de calibração de visibilidade ── -->
   <div id="fx-modal" class="fx-modal" role="dialog" aria-modal="true" aria-labelledby="fx-modal-title">
@@ -231,6 +272,7 @@
 
   <section class="hero">
     <canvas id="hero-canvas"></canvas>
+    <div id="candle-hint">Vá para a luz</div>
     <div class="hero-center">
       <div class="hero-content wrapper">
         <h1 class="hero-title"><span class="blink-phrase"><span class="blink-word">Ilumina-me</span></span></h1>
