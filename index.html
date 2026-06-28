@@ -6,19 +6,130 @@
 <link rel="stylesheet" id="silktide-consent-manager-css" href="https://cdn.jsdelivr.net/gh/silktide/consent-manager@v2.0.0/silktide-consent-manager.css" integrity="sha384-IO1E/jCrQXyH5rwcI0SXP7OXw47JFqQNDQcKhbFvqnL2IunBxxwE2Ne5XyAmCqKs" crossorigin="anonymous">
 <style id="silktide-consent-manager-overrides">
 #stcm-wrapper {
-  --boxShadow: -5px 5px 10px 0px #00000012, 0px 0px 50px 0px #0000001a;
+  --boxShadow: 0 0 60px 0px rgba(0,0,0,.6), 0 0 120px 0px rgba(0,0,0,.3);
   --fontFamily: Helvetica Neue, Segoe UI, Arial, sans-serif;
-  --primaryColor: #242424;
-  --backgroundColor: #ffffff;
-  --textColor: #4b494b;
-  --backdropBackgroundColor: #00000033;
-  --backdropBackgroundBlur: 0px;
-  --iconColor: #242424;
-  --iconBackgroundColor: #ffffff;
+  --primaryColor: #f0ede4;
+  --backgroundColor: #0a0807;
+  --textColor: #ddd8cc;
+  --backdropBackgroundColor: rgba(3,2,2,.82);
+  --backdropBackgroundBlur: 6px;
+  --iconColor: #f0ede4;
+  --iconBackgroundColor: #0a0807;
+}
+
+/* Prompt centralizado — estilo dark */
+#stcm-wrapper #stcm-prompt {
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 2px !important;
+  background: rgba(10,8,7,.96) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.04) inset,
+    0 0 30px rgba(255,255,255,.04),
+    0 20px 60px rgba(0,0,0,.6) !important;
+}
+
+/* Texto do prompt */
+#stcm-wrapper #stcm-prompt p,
+#stcm-wrapper #stcm-prompt span {
+  font-family: Helvetica Neue, Segoe UI, Arial, sans-serif !important;
+  color: rgba(255,255,255,.55) !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  letter-spacing: normal !important;
+}
+
+/* Botões */
+#stcm-wrapper #stcm-prompt button {
+  font-family: Helvetica Neue, Segoe UI, Arial, sans-serif !important;
+  font-size: 14px !important;
+  letter-spacing: normal !important;
+  border-radius: 999px !important;
+  padding: .65rem 1.3rem !important;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease !important;
+}
+
+/* Botão primário (Aceitar) */
+#stcm-wrapper #stcm-prompt button.stcm-prompt__accept-all,
+#stcm-wrapper #stcm-prompt .stcm-button--primary {
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.45) !important;
+  color: rgba(255,255,255,.95) !important;
+  box-shadow: 0 0 20px rgba(255,255,255,.12) !important;
+}
+
+#stcm-wrapper #stcm-prompt button.stcm-prompt__accept-all:hover,
+#stcm-wrapper #stcm-prompt .stcm-button--primary:hover {
+  background: rgba(255,255,255,.15) !important;
+  border-color: rgba(255,255,255,.8) !important;
+}
+
+/* Botão secundário (Rejeitar / Preferências) */
+#stcm-wrapper #stcm-prompt button.stcm-prompt__reject,
+#stcm-wrapper #stcm-prompt button.stcm-prompt__preferences,
+#stcm-wrapper #stcm-prompt .stcm-button--secondary {
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  color: rgba(255,255,255,.5) !important;
+}
+
+#stcm-wrapper #stcm-prompt button.stcm-prompt__reject:hover,
+#stcm-wrapper #stcm-prompt button.stcm-prompt__preferences:hover,
+#stcm-wrapper #stcm-prompt .stcm-button--secondary:hover {
+  border-color: rgba(255,255,255,.35) !important;
+  color: rgba(255,255,255,.75) !important;
+}
+
+/* Backdrop mais escuro */
+#stcm-wrapper #stcm-backdrop {
+  background: rgba(3,2,2,.82) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+}
+
+/* Ícone flutuante — oculto */
+#stcm-wrapper #stcm-icon {
+  display: none !important;
+}
+
+/* Tela de preferências — mesmo estilo dark */
+#stcm-wrapper #stcm-preferences {
+  background: rgba(10,8,7,.97) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 2px !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,.6) !important;
+}
+
+#stcm-wrapper #stcm-preferences .stcm-preferences__title {
+  color: #f0ede4 !important;
+}
+
+#stcm-wrapper #stcm-preferences .stcm-preferences__description {
+  color: rgba(255,255,255,.55) !important;
+}
+
+#stcm-wrapper #stcm-preferences .stcm-consent-type__label {
+  color: rgba(255,255,255,.85) !important;
+}
+
+#stcm-wrapper #stcm-preferences .stcm-consent-type__description {
+  color: rgba(255,255,255,.45) !important;
+}
+
+#stcm-wrapper #stcm-preferences button {
+  border-radius: 999px !important;
 }
 </style>
 <script src="https://cdn.jsdelivr.net/gh/silktide/consent-manager@v2.0.0/silktide-consent-manager.js" integrity="sha384-j4NIMOecmtzMWe9GJADIIe5hTlHG63aiTQ/2XorW10RNyQJg+IU+xwFVDy45wBah" crossorigin="anonymous"></script>
 <script>
+window.__consentPending = true;
+
+function clearConsentPending() {
+  if (!window.__consentPending) return;
+  window.__consentPending = false;
+  document.body.classList.remove('is-consent-pending');
+  document.dispatchEvent(new CustomEvent('ms:consent:done'));
+}
+
 window.silktideConsentManager.init({
   backdrop: {
     show: true
@@ -27,33 +138,21 @@ window.silktideConsentManager.init({
     position: "bottomLeft"
   },
   prompt: {
-    position: "bottomCenter"
+    position: "center"
   },
   consentTypes: [
     {
       id: "analytics",
       label: "Analytics",
       description: "Usado para estatísticas de acesso.&nbsp;",
-      required: false,
+      required: true,
       gtag: "analytics_storage",
-      scripts: [
-        {
-          url: "https://www.googletagmanager.com/gtag/js?id=G-F3131MN7RN",
-          load: "async"
-        }
-      ],
-      onAccept: function() {
-        // Google Analytics 4 (G-F3131MN7RN)
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { window.dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-F3131MN7RN');
-      }
+      onAccept: function() {}
     }
   ],
   text: {
     prompt: {
-      description: "<p>We use cookies on our site to enhance your user experience, provide personalized content, and analyze our traffic.</p>",
+      description: "<p>Precisamos da sua permissão para contabilizar a quantidade de vezes que as pessoas acessam o site. Isso nos permite criar estatísticas de acesso e entender quantas pessoas foram alcançadas.</p>",
       acceptAllButtonText: "Aceitar",
       acceptAllButtonAccessibleLabel: "Aceitar",
       rejectNonEssentialButtonText: "Rejeitar",
@@ -71,6 +170,41 @@ window.silktideConsentManager.init({
     }
   }
 });
+</script>
+<script>
+  // Detecta quando o prompt de consentimento é fechado (cobre "Rejeitar" e "Preferências > Salvar")
+  (function(){
+    if (!window.__consentPending) return;
+    var promptSeen = false;
+    function isVisible(el){
+      if (!el) return false;
+      var s = getComputedStyle(el);
+      return s.display !== 'none' && s.visibility !== 'hidden';
+    }
+    var poll = setInterval(function(){
+      var prompt = document.getElementById('stcm-prompt');
+      var modal = document.getElementById('stcm-modal');
+      var backdrop = document.getElementById('stcm-backdrop');
+      var consentUI = isVisible(prompt) || isVisible(modal) || isVisible(backdrop);
+      if (consentUI) {
+        promptSeen = true;
+      } else if (promptSeen) {
+        clearConsentPending();
+        clearInterval(poll);
+      }
+    }, 300);
+    // Após 3s: se o prompt nunca apareceu, o usuário já consentiu antes — libera
+    setTimeout(function(){
+      if (window.__consentPending && !promptSeen) {
+        clearConsentPending();
+        clearInterval(poll);
+      }
+    }, 3000);
+    // Safety timeout: after 60s, auto-clear
+    setTimeout(function(){
+      if (window.__consentPending) { clearConsentPending(); clearInterval(poll); }
+    }, 60000);
+  })();
 </script>
   <script>
     // Garante que a página sempre comece no topo ao carregar/atualizar,
@@ -181,7 +315,7 @@ window.silktideConsentManager.init({
       letter-spacing:.05em;
     }
   </style>
-  <script type="module" crossorigin src="/preview-manejo/assets/index-CmOs1hnz.js"></script>
+  <script type="module" crossorigin src="/preview-manejo/assets/index-hhe3kbkw.js"></script>
   <link rel="stylesheet" crossorigin href="/preview-manejo/assets/style-CwPQkGeV.css">
 </head>
 <!-- Google tag (gtag.js) -->
@@ -193,7 +327,7 @@ window.silktideConsentManager.init({
 
   gtag('config', 'G-F3131MN7RN');
 </script>
-<body class="is-pre-reveal">
+<body class="is-pre-reveal is-consent-pending">
 
   <!-- ── Bloqueio para dispositivos móveis ── -->
   <div id="mobile-block" class="mobile-block">
